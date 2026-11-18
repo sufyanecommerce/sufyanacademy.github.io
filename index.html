@@ -1040,6 +1040,30 @@
 #calc-app .proj{ padding:28px 0 64px; }
 #calc-app .chero{ padding:56px 0 120px; }
 @media(max-width:900px){ #calc-app .chero{ padding:40px 0 110px; } }
+
+/* extra expenses */
+#calc-app .xp-list{display:grid; gap:12px;}
+#calc-app .xp-row{display:grid; grid-template-columns:1.4fr 1fr 1fr 40px; gap:10px; align-items:center;}
+#calc-app .xp-row input[type=text], #calc-app .xp-row select{width:100%; font-family:inherit; font-size:14.5px; font-weight:600; color:var(--ink); background:#F7F8F5; border:1.5px solid var(--line); border-radius:11px; padding:12px 12px; height:46px; transition:border .15s, box-shadow .15s, background .15s;}
+#calc-app .xp-row select{appearance:none; -webkit-appearance:none; cursor:pointer; padding-right:28px; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 10px center;}
+#calc-app .xp-row input[type=text]:focus, #calc-app .xp-row select:focus{outline:none; border-color:var(--navy); background-color:#fff; box-shadow:0 0 0 4px rgba(27,59,111,.1);}
+#calc-app .xp-row .inp input[type=number]{height:46px; font-size:14.5px;}
+#calc-app .xp-del{width:40px; height:40px; border-radius:10px; border:1.5px solid var(--line); background:#fff; color:var(--muted-2); font-size:20px; line-height:1; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .15s;}
+#calc-app .xp-del:hover{color:var(--loss); border-color:var(--loss);}
+#calc-app .xp-foot{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:14px;}
+#calc-app .xp-add{padding:10px 16px; font-size:13.5px;}
+#calc-app .xp-total{margin-left:auto; font-size:13px; color:var(--muted);}
+#calc-app .xp-total b{color:var(--ink); font-weight:700;}
+@media(max-width:560px){
+  #calc-app .xp-row{grid-template-columns:1fr 1fr 40px;}
+  #calc-app .xp-row .xp-name{grid-column:1 / -1;}
+  #calc-app .xp-row .xp-name + *{}
+}
+
+/* single-file pages */
+[hidden]{display:none !important;}
+.nav-links a.active{color:var(--coral);}
+#calculator-page{ scroll-margin-top:0; }
 </style>
 </head>
 <body>
@@ -1049,11 +1073,11 @@
 </div>
 <header>
   <nav>
-    <a href="index.html" class="logo"><div class="logo-mark">SA</div>Sufyan <span class="accent">Academy</span></a>
+    <a href="#home" class="logo"><div class="logo-mark">SA</div>Sufyan <span class="accent">Academy</span></a>
     <div class="nav-links">
       <a href="#curriculum">Curriculum</a>
       <a href="#pricing">Pricing</a>
-      <a href="#calculator">Calculator</a>
+      <a href="#calculator" id="nav-calc">Calculator</a>
       <a href="enroll.html">Enroll</a>
       <a href="#faq">FAQs</a>
     </div>
@@ -1061,6 +1085,7 @@
   </nav>
 </header>
 
+<div id="view-home">
 <section class="hero">
   <div class="wrap hero-grid">
     <div class="hero-text">
@@ -1461,190 +1486,6 @@
   </div>
 </section>
 
-<!-- ===== CALCULATOR ===== -->
-<div id="calculator"><div id="calc-app">
-<section class="chero" aria-label="Ecommerce Profit and Loss Calculator">
-  <div class="wrap">
-    <div>
-      <div class="badge"><i></i>Ecommerce Calculator · Free</div>
-      <h1>Profit &amp; Loss <span>Calculator</span></h1>
-      <p>Enter your orders, cancellations, returns, shipping and marketing cost, and instantly see whether you are making a profit or a loss.</p>
-    </div>
-    <div class="chero-points">
-      <div class="hp"><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div><div><b>Live results</b><span>Results update as you type</span></div></div>
-      <div class="hp"><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg></div><div><b>Returns included</b><span>Shipping and product cost are counted correctly</span></div></div>
-      <div class="hp"><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></div><div><b>1 to 30 day plan</b><span>Investment and profit projection</span></div></div>
-    </div>
-  </div>
-</section>
-
-<div class="wrap">
-  <div class="calc">
-
-    <!-- INPUTS -->
-    <div class="inputs">
-
-      <div class="card">
-        <div class="card-head">
-          <div class="ic navy"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg></div>
-          <div><h3>Product Pricing</h3><p>Product cost, shipping and your margin</p></div>
-        </div>
-        <div class="grid2">
-          <div class="field">
-            <label for="cost">Product cost</label>
-            <div class="inp pre"><span class="u">Rs</span><input id="cost" type="number" inputmode="decimal" min="0" value="500"></div>
-            <span class="hint">What the product costs you</span>
-          </div>
-          <div class="field">
-            <label for="margin">Margin add-on</label>
-            <div class="inp pre"><span class="u">Rs</span><input id="margin" type="number" inputmode="decimal" min="0" value="1499"></div>
-            <span class="hint">Profit you add on top of the cost</span>
-          </div>
-          <div class="field">
-            <label>Selling price <span class="calc-tag">Auto</span></label>
-            <div class="calc-box" id="sellPrice"><span id="sellPriceV">Rs 1,999</span><small>Product cost + Margin</small></div>
-          </div>
-          <div class="field">
-            <label for="ship">Shipping per parcel</label>
-            <div class="inp pre"><span class="u">Rs</span><input id="ship" type="number" inputmode="decimal" min="0" value="200"></div>
-            <span class="hint">Courier charges for each confirmed parcel</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-head">
-          <div class="ic coral"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg></div>
-          <div><h3>Order Generation</h3><p>Daily orders and ad spend</p></div>
-        </div>
-        <div class="grid2">
-          <div class="field">
-            <label for="orders">Total orders / day</label>
-            <div class="inp"><input id="orders" type="number" inputmode="numeric" min="0" value="64"></div>
-            <span class="hint">All orders coming to your website</span>
-          </div>
-          <div class="field">
-            <label for="mkt">Marketing cost per order</label>
-            <div class="inp pre"><span class="u">Rs</span><input id="mkt" type="number" inputmode="decimal" min="0" value="235"></div>
-            <span class="hint">Ad spend ÷ total orders (in Rs)</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-head">
-          <div class="ic green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="18.5" cy="18.5" r="2"/></svg></div>
-          <div><h3>Shipment / Return</h3><p>Cancellation and return percentage</p></div>
-        </div>
-        <div class="grid2">
-          <div class="slider-field">
-            <div class="slider-top">
-              <label for="cancel">Before-booking cancellation</label>
-              <div class="slider-val"><input id="cancel" type="number" inputmode="decimal" min="0" max="100" value="65" aria-label="Cancellation percent">%</div>
-            </div>
-            <input id="cancelR" type="range" min="0" max="100" step="1" value="65" aria-label="Cancellation slider">
-            <div class="slider-scale"><span>0%</span><span>Orders cancelled at the confirmation call</span><span>100%</span></div>
-          </div>
-          <div class="slider-field">
-            <div class="slider-top">
-              <label for="ret">Return</label>
-              <div class="slider-val"><input id="ret" type="number" inputmode="decimal" min="0" max="100" value="20" aria-label="Return percent">%</div>
-            </div>
-            <input id="retR" type="range" min="0" max="100" step="1" value="20" aria-label="Return slider">
-            <div class="slider-scale"><span>0%</span><span>Parcels returned after dispatch</span><span>100%</span></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="actions">
-        <button class="btn btn-primary" id="btnReset" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Reset to default</button>
-        <button class="btn btn-ghost" id="btnCopy" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span id="copyTxt">Copy summary</span></button>
-      </div>
-    </div>
-
-    <!-- RESULTS -->
-    <aside class="result" aria-live="polite">
-      <div class="verdict" id="verdict">
-        <div class="v-top">
-          <div class="v-label" id="vLabel">Daily Profit</div>
-          <div class="v-pill" id="vPill">▲ Profit</div>
-        </div>
-        <div class="v-amount" id="vAmount">Rs 0</div>
-        <div class="v-note" id="vNote"></div>
-        <div class="v-stats">
-          <div class="vs"><span>7 days</span><b id="s7">—</b></div>
-          <div class="vs"><span>30 days</span><b id="s30">—</b></div>
-          <div class="vs"><span>Per delivered parcel</span><b id="sUnit">—</b></div>
-        </div>
-      </div>
-
-      <div class="card sm">
-        <h4>Order Funnel</h4>
-        <div class="sub">How one day's orders move through</div>
-        <div class="funnel">
-          <div class="fl"><span class="name">Total orders</span><div class="bar"><i class="c-navy" id="bTotal"></i></div><span class="n" id="fTotal">0</span></div>
-          <div class="fl"><span class="name">Cancelled</span><div class="bar"><i class="c-red" id="bCancel"></i></div><span class="n" id="fCancel">0</span></div>
-          <div class="fl"><span class="name">Confirmed</span><div class="bar"><i class="c-amber" id="bConf"></i></div><span class="n" id="fConf">0</span></div>
-          <div class="fl"><span class="name">Returns</span><div class="bar"><i class="c-red" id="bRet"></i></div><span class="n" id="fRet">0</span></div>
-          <div class="fl"><span class="name">Delivered</span><div class="bar"><i class="c-green" id="bDel"></i></div><span class="n" id="fDel">0</span></div>
-        </div>
-      </div>
-
-      <div class="card sm">
-        <h4>Where did the money go?</h4>
-        <div class="sub">Breakdown of the delivered parcels amount</div>
-        <div class="split" id="split"></div>
-        <div class="legend" id="legend"></div>
-        <div class="rows">
-          <div class="row"><span class="k"><em style="background:var(--green)"></em><span id="kRev">Delivered parcels amount</span></span><span class="v pos" id="vRev">0</span></div>
-          <div class="row"><span class="k"><em style="background:var(--amber)"></em><span id="kShip">Shipping</span></span><span class="v neg" id="vShip">0</span></div>
-          <div class="row"><span class="k"><em style="background:var(--navy)"></em><span><span id="kProd">Product cost</span><small>Delivered parcels only</small></span></span><span class="v neg" id="vProd">0</span></div>
-          <div class="row"><span class="k"><em style="background:var(--coral)"></em><span id="kMkt">Marketing cost</span></span><span class="v neg" id="vMkt">0</span></div>
-          <div class="row total"><span class="k">Net profit / loss</span><span class="v" id="vNet">0</span></div>
-        </div>
-      </div>
-
-      <div class="card sm">
-        <h4>Key Ratios</h4>
-        <div class="sub">How healthy your business is</div>
-        <div class="ratios">
-          <div class="ratio"><div class="n" id="rInv">0%</div><div class="l">Profit ÷ Investment</div></div>
-          <div class="ratio"><div class="n" id="rMkt">0%</div><div class="l">Profit ÷ Marketing</div></div>
-          <div class="ratio"><div class="n" id="rProd">0%</div><div class="l">Profit ÷ Product cost</div></div>
-        </div>
-        <div class="be">
-          <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></div>
-          <div><b id="vBE">—</b><span>Break-even marketing cost — above this ad cost you start losing money</span></div>
-        </div>
-      </div>
-    </aside>
-  </div>
-
-  <!-- PROJECTION -->
-  <section class="proj">
-    <div class="sec-head">
-      <div>
-        <h2>Investment &amp; Profit Projection</h2>
-        <p>Projection for the coming days at this same performance. Type your own number of days in the last column.</p>
-      </div>
-    </div>
-    <div class="tiles" id="tiles"></div>
-    <div class="tbl-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th></th><th>1 Day</th><th>5 Days</th><th>7 Days</th><th>10 Days</th><th>30 Days</th>
-            <th><span class="custom-days"><input id="customDays" type="number" min="1" value="15" aria-label="Custom days"> Days</span></th>
-          </tr>
-        </thead>
-        <tbody id="projBody"></tbody>
-      </table>
-    </div>
-    <p class="note">Investment = product cost of confirmed parcels + marketing cost. Shipping and marketing cost of returned parcels count as a loss; product cost is counted for delivered parcels only.</p>
-  </section>
-</div>
-</div></div>
-
 <section id="faq">
   <div class="wrap">
     <div class="section-head">
@@ -1689,6 +1530,188 @@
     <div class="final-urgency">🔥 Only 20 seats available this batch</div>
   </div>
 </section>
+</div>
+
+<div id="view-calculator" hidden>
+<!-- ===== CALCULATOR ===== -->
+<div id="calculator-page"><div id="calc-app">
+<section class="chero" aria-label="Ecommerce Profit and Loss Calculator">
+  <div class="wrap">
+    <div>
+      <div class="badge"><i></i>Ecommerce Calculator · Free</div>
+      <h1>Profit &amp; Loss <span>Calculator</span></h1>
+      <p>Enter your orders, cancellations, returns, shipping and marketing cost, and instantly see whether you are making a profit or a loss.</p>
+    </div>
+    <div class="chero-points">
+      <div class="hp"><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div><div><b>Live results</b><span>Results update as you type</span></div></div>
+      <div class="hp"><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg></div><div><b>Returns included</b><span>Shipping and product cost are counted correctly</span></div></div>
+      <div class="hp"><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></div><div><b>Total investment</b><span>See how much you need to invest</span></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="calc">
+
+    <!-- INPUTS -->
+    <div class="inputs">
+
+      <div class="card">
+        <div class="card-head">
+          <div class="ic navy"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg></div>
+          <div><h3>Product Pricing</h3><p>Product cost, shipping and your margin</p></div>
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label for="cost">Product cost</label>
+            <div class="inp pre"><span class="u">Rs</span><input id="cost" type="number" inputmode="decimal" min="0" value="500"></div>
+            <span class="hint">What the product costs you</span>
+          </div>
+          <div class="field">
+            <label for="margin">Margin add-on</label>
+            <div class="inp pre"><span class="u">Rs</span><input id="margin" type="number" inputmode="decimal" min="0" value="1499"></div>
+            <span class="hint">Profit you add on top of the cost</span>
+          </div>
+          <div class="field">
+            <label>Selling price <span class="calc-tag">Auto</span></label>
+            <div class="calc-box" id="sellPrice"><span id="sellPriceV">Rs 1,999</span><small>Product cost + Margin</small></div>
+          </div>
+          <div class="field">
+            <label for="ship">Shipping per parcel</label>
+            <div class="inp pre"><span class="u">Rs</span><input id="ship" type="number" inputmode="decimal" min="0" value="200"></div>
+            <span class="hint">Courier charges for each confirmed parcel</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="ic coral"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg></div>
+          <div><h3>Order Generation</h3><p>Total orders and ad spend</p></div>
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label for="orders">Total orders</label>
+            <div class="inp"><input id="orders" type="number" inputmode="numeric" min="0" value="64"></div>
+            <span class="hint">All orders coming to your website</span>
+          </div>
+          <div class="field">
+            <label for="mkt">Marketing cost per order</label>
+            <div class="inp pre"><span class="u">Rs</span><input id="mkt" type="number" inputmode="decimal" min="0" value="235"></div>
+            <span class="hint">Ad spend ÷ total orders (in Rs)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="ic green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="18.5" cy="18.5" r="2"/></svg></div>
+          <div><h3>Shipment / Return</h3><p>Cancellation and return percentage</p></div>
+        </div>
+        <div class="grid2">
+          <div class="slider-field">
+            <div class="slider-top">
+              <label for="cancel">Before-booking cancellation</label>
+              <div class="slider-val"><input id="cancel" type="number" inputmode="decimal" min="0" max="100" value="65" aria-label="Cancellation percent">%</div>
+            </div>
+            <input id="cancelR" type="range" min="0" max="100" step="1" value="65" aria-label="Cancellation slider">
+            <div class="slider-scale"><span>0%</span><span>Orders cancelled at the confirmation call</span><span>100%</span></div>
+          </div>
+          <div class="slider-field">
+            <div class="slider-top">
+              <label for="ret">Return</label>
+              <div class="slider-val"><input id="ret" type="number" inputmode="decimal" min="0" max="100" value="20" aria-label="Return percent">%</div>
+            </div>
+            <input id="retR" type="range" min="0" max="100" step="1" value="20" aria-label="Return slider">
+            <div class="slider-scale"><span>0%</span><span>Parcels returned after dispatch</span><span>100%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="ic coral"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg></div>
+          <div><h3>Extra Expenses</h3><p>Other costs not covered above, like packing</p></div>
+        </div>
+        <div class="xp-list" id="xpList"></div>
+        <div class="xp-foot">
+          <button class="btn btn-ghost xp-add" id="xpAdd" type="button">+ Add expense</button>
+          <span class="xp-total">Total extra: <b id="xpTotal">Rs 0</b></span>
+        </div>
+        <span class="hint" style="display:block;margin-top:12px">Per parcel = every dispatched parcel (returns included). Per order = every order. Fixed total = one amount for the whole batch.</span>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="btnReset" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Reset to default</button>
+        <button class="btn btn-ghost" id="btnCopy" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span id="copyTxt">Copy summary</span></button>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <aside class="result" aria-live="polite">
+      <div class="verdict" id="verdict">
+        <div class="v-top">
+          <div class="v-label" id="vLabel">Daily Profit</div>
+          <div class="v-pill" id="vPill">▲ Profit</div>
+        </div>
+        <div class="v-amount" id="vAmount">Rs 0</div>
+        <div class="v-note" id="vNote"></div>
+        <div class="v-stats">
+          <div class="vs"><span>Total revenue</span><b id="sRev">—</b></div>
+          <div class="vs"><span>Total investment</span><b id="sInv">—</b></div>
+          <div class="vs"><span>Per delivered parcel</span><b id="sUnit">—</b></div>
+        </div>
+      </div>
+
+      <div class="card sm">
+        <h4>Order Funnel</h4>
+        <div class="sub">How your total orders move through</div>
+        <div class="funnel">
+          <div class="fl"><span class="name">Total orders</span><div class="bar"><i class="c-navy" id="bTotal"></i></div><span class="n" id="fTotal">0</span></div>
+          <div class="fl"><span class="name">Cancelled</span><div class="bar"><i class="c-red" id="bCancel"></i></div><span class="n" id="fCancel">0</span></div>
+          <div class="fl"><span class="name">Confirmed</span><div class="bar"><i class="c-amber" id="bConf"></i></div><span class="n" id="fConf">0</span></div>
+          <div class="fl"><span class="name">Returns</span><div class="bar"><i class="c-red" id="bRet"></i></div><span class="n" id="fRet">0</span></div>
+          <div class="fl"><span class="name">Delivered</span><div class="bar"><i class="c-green" id="bDel"></i></div><span class="n" id="fDel">0</span></div>
+        </div>
+      </div>
+
+      <div class="card sm">
+        <h4>Where did the money go?</h4>
+        <div class="sub">Breakdown of the delivered parcels amount</div>
+        <div class="split" id="split"></div>
+        <div class="legend" id="legend"></div>
+        <div class="rows">
+          <div class="row"><span class="k"><em style="background:var(--green)"></em><span id="kRev">Delivered parcels amount</span></span><span class="v pos" id="vRev">0</span></div>
+          <div class="row"><span class="k"><em style="background:var(--amber)"></em><span id="kShip">Shipping</span></span><span class="v neg" id="vShip">0</span></div>
+          <div class="row"><span class="k"><em style="background:var(--navy)"></em><span><span id="kProd">Product cost</span><small>Delivered parcels only</small></span></span><span class="v neg" id="vProd">0</span></div>
+          <div class="row"><span class="k"><em style="background:var(--coral)"></em><span id="kMkt">Marketing cost</span></span><span class="v neg" id="vMkt">0</span></div>
+          <div class="row" id="rowExtra" style="display:none"><span class="k"><em style="background:#6D5BD0"></em><span><span>Extra expenses</span><small id="kExtra">Packing and other costs</small></span></span><span class="v neg" id="vExtra">0</span></div>
+          <div class="row total"><span class="k">Net profit / loss</span><span class="v" id="vNet">0</span></div>
+        </div>
+      </div>
+
+      <div class="card sm">
+        <h4>Key Ratios</h4>
+        <div class="sub">How healthy your business is</div>
+        <div class="ratios">
+          <div class="ratio"><div class="n" id="rInv">0%</div><div class="l">Profit ÷ Investment</div></div>
+          <div class="ratio"><div class="n" id="rMkt">0%</div><div class="l">Profit ÷ Marketing</div></div>
+          <div class="ratio"><div class="n" id="rProd">0%</div><div class="l">Profit ÷ Product cost</div></div>
+        </div>
+        <div class="be">
+          <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></div>
+          <div><b id="vBE">—</b><span>Break-even marketing cost — above this ad cost you start losing money</span></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <section class="proj">
+    <p class="note">Investment = product cost of confirmed parcels + marketing cost + extra expenses. Shipping and marketing cost of returned parcels count as a loss; product cost is counted for delivered parcels only.</p>
+  </section>
+</div>
+</div></div>
+</div>
 
 <footer>
   <div class="wrap">
@@ -1697,6 +1720,7 @@
       <div class="foot-links">
         <a href="mailto:sufyanahmad.info@gmail.com">sufyanahmad.info@gmail.com</a>
         <a href="https://wa.me/923004540431" target="_blank" rel="noopener">WhatsApp: 0300-4540431</a>
+        <a href="#calculator">Free Profit &amp; Loss Calculator</a>
       </div>
     </div>
     <div class="foot-copy">© 2026 Sufyan Academy. All rights reserved.</div>
@@ -1747,7 +1771,8 @@
   const stickyBar = document.getElementById('sticky-cta');
   const heroSection = document.querySelector('.hero');
   window.addEventListener('scroll', ()=>{
-    const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+    const calcView = document.getElementById('view-calculator');
+    const heroBottom = (calcView && !calcView.hidden) ? 300 : heroSection.offsetTop + heroSection.offsetHeight;
     if(window.scrollY > heroBottom){
       stickyBar.classList.add('show');
     } else {
@@ -1792,9 +1817,12 @@
 <script>
 (function(){
   const $ = id => document.getElementById(id);
-  const DEFAULTS = { cost:500, margin:1499, ship:200, orders:64, mkt:235, cancel:65, ret:20, customDays:15 };
+  const DEFAULTS = { cost:500, margin:1499, ship:200, orders:64, mkt:235, cancel:65, ret:20 };
   const inputs = ['cost','margin','ship','orders','mkt','cancel','ret'];
   const EPS = 1e-9;
+  const TYPES = [['parcel','Per parcel'],['order','Per order'],['fixed','Fixed total']];
+  const newExtras = () => [{ name:'Packing', amt:'', type:'parcel' }];
+  let extras = newExtras();
 
   const num = id => { const v = parseFloat($(id).value); return isFinite(v) && v > 0 ? v : 0; };
   const pct = id => Math.min(100, num(id)) / 100;
@@ -1820,14 +1848,18 @@
     const shipping = confirmed * ship;
     const product = delivered * cost;
     const marketing = orders * mktPkr;
-    const net = revenue - shipping - product - marketing;
+    const extra = extras.reduce((t, e) => {
+      const a = Math.max(0, parseFloat(e.amt) || 0);
+      return t + a * (e.type === 'parcel' ? confirmed : e.type === 'order' ? orders : 1);
+    }, 0);
+    const net = revenue - shipping - product - marketing - extra;
 
     const productInv = confirmed * cost;
-    const investment = productInv + marketing;
+    const investment = productInv + marketing + extra;
 
     return { cost, margin, ship, orders, price, mktPkr,
              confirmed, cancelled, returns, delivered,
-             revenue, shipping, product, marketing, net, productInv, investment };
+             revenue, shipping, product, marketing, extra, net, productInv, investment };
   }
 
   function setSign(el, val){
@@ -1866,17 +1898,21 @@
     $('vShip').textContent = '− ' + rs(r.shipping);
     $('vProd').textContent = '− ' + rs(r.product);
     $('vMkt').textContent = '− ' + rs(r.marketing);
+    $('vExtra').textContent = '− ' + rs(r.extra);
+    $('rowExtra').style.display = r.extra > 0 ? '' : 'none';
+    $('xpTotal').textContent = rs(r.extra);
     $('vNet').textContent = rs(r.net);
     setSign($('vNet'), r.net);
 
     // money split bar: costs + profit (or loss overflow)
-    const costs = r.shipping + r.product + r.marketing;
+    const costs = r.shipping + r.product + r.marketing + r.extra;
     const total = Math.max(r.revenue, costs) || 1;
     const profitSeg = Math.max(0, r.net);
     const parts = [
       ['Product', r.product, 'var(--navy)'],
       ['Shipping', r.shipping, 'var(--amber)'],
       ['Marketing', r.marketing, 'var(--coral)'],
+      ...(r.extra > 0 ? [['Extra', r.extra, '#6D5BD0']] : []),
       [r.net < 0 ? 'Loss (costs are higher than revenue)' : 'Profit', r.net < 0 ? -r.net * 0 : profitSeg, 'var(--green)']
     ];
     $('split').innerHTML = parts.map(p => '<i style="width:' + (p[1] / total * 100) + '%;background:' + p[2] + '"></i>').join('');
@@ -1884,20 +1920,21 @@
       ['Product', r.product, 'var(--navy)'],
       ['Shipping', r.shipping, 'var(--amber)'],
       ['Marketing', r.marketing, 'var(--coral)'],
+      ...(r.extra > 0 ? [['Extra', r.extra, '#6D5BD0']] : []),
       [r.net < 0 ? 'Loss' : 'Profit', Math.abs(r.net), r.net < 0 ? 'var(--loss)' : 'var(--green)']
     ].map(p => '<div><i style="background:' + p[2] + '"></i>' + p[0] + '<b>' + pc(div(p[1], total)) + '</b></div>').join('');
 
     // verdict
     const loss = r.net < 0;
     $('verdict').classList.toggle('loss', loss);
-    $('vLabel').textContent = loss ? 'Daily Loss' : (r.net === 0 ? 'Break-even' : 'Daily Profit');
+    $('vLabel').textContent = loss ? 'Total Loss' : (r.net === 0 ? 'Break-even' : 'Total Profit');
     $('vPill').textContent = loss ? '▼ Loss' : (r.net === 0 ? '● Break-even' : '▲ Profit');
     $('vAmount').textContent = rs(Math.abs(r.net));
     $('vNote').textContent = loss
-      ? 'At this performance you are making a loss every day. Check your marketing cost, returns or margin.'
-      : (r.net === 0 ? 'No profit, no loss.' : 'At this performance you are making a profit every day.');
-    $('s7').textContent = rs(r.net * 7);
-    $('s30').textContent = rs(r.net * 30);
+      ? 'On these orders you are making a loss. Check your marketing cost, returns or margin.'
+      : (r.net === 0 ? 'No profit, no loss.' : 'On these orders you are making a profit.');
+    $('sRev').textContent = rs(r.revenue);
+    $('sInv').textContent = rs(r.investment);
     $('sUnit').textContent = r.delivered ? rs(r.net / r.delivered) : '—';
 
     // ratios
@@ -1907,47 +1944,16 @@
     ['rInv','rMkt','rProd'].forEach(id => { $(id).style.color = r.net < 0 ? 'var(--loss)' : 'var(--green)'; });
 
     // break-even marketing per order
-    const beOrder = div(r.revenue - r.shipping - r.product, r.orders);
+    const beOrder = div(r.revenue - r.shipping - r.product - r.extra, r.orders);
     $('vBE').textContent = beOrder > 0
       ? 'Rs ' + fmt(beOrder) + ' per order'
       : 'No margin left';
-
-    // projection
-    const customD = Math.max(1, Math.floor(parseFloat($('customDays').value) || 1));
-    const days = [1,5,7,10,30,customD];
-    const rows = [
-      ['Product cost total',      d => r.productInv * d, false],
-      ['Marketing cost total',    d => r.marketing * d, false],
-      ['Investment required',     d => r.investment * d, false, 'hl'],
-      ['Confirmed orders',        d => fmt(r.confirmed * d), true],
-      ['Delivered parcels',       d => fmt(r.delivered * d), true],
-      ['Profit / loss after returns', d => r.net * d, false, 'profit'],
-    ];
-    $('projBody').innerHTML = rows.map(([label, fn, raw, cls]) => {
-      const cells = days.map(d => {
-        const v = fn(d);
-        if (raw) return '<td>' + v + '</td>';
-        const sign = cls === 'profit' ? (v < 0 ? 'neg' : v > 0 ? 'pos' : '') : '';
-        return '<td class="' + sign + '">' + rs(v) + '</td>';
-      }).join('');
-      return '<tr class="' + (cls === 'hl' ? 'hl' : cls === 'profit' ? 'hl profit' : '') + '"><td>' + label + '</td>' + cells + '</tr>';
-    }).join('');
-
-    $('tiles').innerHTML = [
-      ['7-day profit', r.net * 7, true],
-      ['30-day profit', r.net * 30, true],
-      ['30-day investment', r.investment * 30, false],
-      ['30-day delivered', fmt(r.delivered * 30) + ' parcels', null]
-    ].map(t => {
-      const cls = t[2] === true ? (t[1] < 0 ? 'neg' : 'pos') : '';
-      return '<div class="tile ' + cls + '"><span>' + t[0] + '</span><b>' + (typeof t[1] === 'number' ? rs(t[1]) : t[1]) + '</b></div>';
-    }).join('');
 
     window.__last = r;
   }
 
   // inputs
-  inputs.concat('customDays').forEach(id => $(id).addEventListener('input', render));
+  inputs.forEach(id => $(id).addEventListener('input', render));
 
   // slider <-> number sync
   [['cancel','cancelR'],['ret','retR']].forEach(([n, s]) => {
@@ -1961,20 +1967,22 @@
     Object.keys(DEFAULTS).forEach(k => { $(k).value = DEFAULTS[k]; });
     $('cancelR').value = DEFAULTS.cancel; $('retR').value = DEFAULTS.ret;
     syncSlider($('cancelR')); syncSlider($('retR'));
+    extras = newExtras(); drawExtras();
     render();
   });
 
   $('btnCopy').addEventListener('click', () => {
     const r = window.__last;
     const text = [
-      'Ecommerce Profit & Loss (per day)',
+      'Ecommerce Profit & Loss',
       'Total orders: ' + fmt(r.orders) + ' | Confirmed: ' + r.confirmed + ' | Returns: ' + r.returns + ' | Delivered: ' + r.delivered,
       'Revenue: ' + rs(r.revenue),
       'Shipping: ' + rs(r.shipping),
       'Product cost: ' + rs(r.product),
       'Marketing: ' + rs(r.marketing),
-      (r.net < 0 ? 'Net LOSS: ' : 'Net PROFIT: ') + rs(Math.abs(r.net)),
-      '30 days: ' + rs(r.net * 30)
+      ...(r.extra > 0 ? ['Extra expenses: ' + rs(r.extra)] : []),
+      'Total investment: ' + rs(r.investment),
+      (r.net < 0 ? 'Total LOSS: ' : 'Total PROFIT: ') + rs(Math.abs(r.net))
     ].join('\n');
     const t = $('copyTxt'), old = t.textContent;
     navigator.clipboard.writeText(text).then(() => {
@@ -1983,7 +1991,87 @@
     }).catch(() => {});
   });
 
+
+  // extra expenses UI
+  const esc = t => String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  function drawExtras(){
+    $('xpList').innerHTML = extras.map((e, i) =>
+      '<div class="xp-row">' +
+        '<input class="xp-name" type="text" maxlength="40" placeholder="Expense name" aria-label="Expense name" data-i="' + i + '" data-k="name" value="' + esc(e.name) + '">' +
+        '<div class="inp pre"><span class="u">Rs</span><input type="number" inputmode="decimal" min="0" placeholder="0" aria-label="Expense amount" data-i="' + i + '" data-k="amt" value="' + esc(e.amt) + '"></div>' +
+        '<select aria-label="Expense type" data-i="' + i + '" data-k="type">' +
+          TYPES.map(t => '<option value="' + t[0] + '"' + (t[0] === e.type ? ' selected' : '') + '>' + t[1] + '</option>').join('') +
+        '</select>' +
+        '<button class="xp-del" type="button" aria-label="Remove expense" data-del="' + i + '">×</button>' +
+      '</div>').join('');
+    $('xpAdd').style.display = extras.length >= 10 ? 'none' : '';
+  }
+  $('xpList').addEventListener('input', ev => {
+    const t = ev.target, i = t.dataset.i;
+    if (i === undefined) return;
+    extras[i][t.dataset.k] = t.value;
+    render();
+  });
+  $('xpList').addEventListener('change', ev => {
+    const t = ev.target;
+    if (t.tagName === 'SELECT') { extras[t.dataset.i].type = t.value; render(); }
+  });
+  $('xpList').addEventListener('click', ev => {
+    const b = ev.target.closest('[data-del]');
+    if (!b) return;
+    extras.splice(+b.dataset.del, 1);
+    drawExtras(); render();
+  });
+  $('xpAdd').addEventListener('click', () => {
+    extras.push({ name:'', amt:'', type:'parcel' });
+    drawExtras(); render();
+    const f = $('xpList').querySelector('.xp-row:last-child .xp-name'); if (f) f.focus();
+  });
+
+  drawExtras();
   render();
+})();
+</script>
+
+<script>
+// ===== Simple page router: #calculator opens the calculator page, everything else is the homepage =====
+(function(){
+  const home = document.getElementById('view-home');
+  const calc = document.getElementById('view-calculator');
+  const navCalc = document.getElementById('nav-calc');
+  const homeTitle = document.title;
+  const calcTitle = 'Free Ecommerce Profit & Loss Calculator | Sufyan Academy';
+  let current = null;
+
+  function route(){
+    const hash = location.hash;
+    if (hash === '#calculator') {
+      if (current !== 'calc') {
+        home.hidden = true; calc.hidden = false;
+        document.title = calcTitle;
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }
+      current = 'calc';
+      navCalc.classList.add('active');
+    } else {
+      const switched = current !== 'home';
+      home.hidden = false; calc.hidden = true;
+      document.title = homeTitle;
+      current = 'home';
+      navCalc.classList.remove('active');
+      if (switched) {
+        const el = hash.length > 1 ? document.getElementById(hash.slice(1)) : null;
+        if (el) el.scrollIntoView({ behavior: 'instant' });
+        else window.scrollTo({ top: 0, behavior: 'instant' });
+      }
+    }
+    window.dispatchEvent(new Event('scroll'));
+  }
+  window.addEventListener('hashchange', route);
+  document.querySelector('header .logo').addEventListener('click', () => {
+    if (location.hash === '#home') window.scrollTo({ top: 0, behavior: 'instant' });
+  });
+  route();
 })();
 </script>
 
