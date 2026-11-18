@@ -301,18 +301,9 @@
             <span class="hint">Website par aane wale saare orders</span>
           </div>
           <div class="field">
-            <label for="dollar">Dollar rate</label>
-            <div class="inp pre"><span class="u">Rs</span><input id="dollar" type="number" inputmode="decimal" min="0" value="297"></div>
-            <span class="hint">1 USD = kitne PKR</span>
-          </div>
-          <div class="field">
             <label for="mkt">Marketing cost per order</label>
-            <div class="inp pre"><span class="u">$</span><input id="mkt" type="number" inputmode="decimal" min="0" step="0.01" value="0.79"></div>
-            <span class="hint">Ad spend ÷ total orders (dollars mein)</span>
-          </div>
-          <div class="field">
-            <label>Marketing per order (PKR) <span class="calc-tag">Auto</span></label>
-            <div class="calc-box" id="mktPkr"><span id="mktPkrV">Rs 235</span><small>$ cost × Dollar rate</small></div>
+            <div class="inp pre"><span class="u">Rs</span><input id="mkt" type="number" inputmode="decimal" min="0" value="235"></div>
+            <span class="hint">Ad spend ÷ total orders (Rs mein)</span>
           </div>
         </div>
       </div>
@@ -446,8 +437,8 @@
 <script>
 (function(){
   const $ = id => document.getElementById(id);
-  const DEFAULTS = { cost:500, margin:1499, ship:200, orders:64, dollar:297, mkt:0.79, cancel:65, ret:20, customDays:15 };
-  const inputs = ['cost','margin','ship','orders','dollar','mkt','cancel','ret'];
+  const DEFAULTS = { cost:500, margin:1499, ship:200, orders:64, mkt:235, cancel:65, ret:20, customDays:15 };
+  const inputs = ['cost','margin','ship','orders','mkt','cancel','ret'];
   const EPS = 1e-9;
 
   const num = id => { const v = parseFloat($(id).value); return isFinite(v) && v > 0 ? v : 0; };
@@ -460,11 +451,10 @@
 
   function calc(){
     const cost = num('cost'), margin = num('margin'), ship = num('ship');
-    const orders = num('orders'), dollar = num('dollar'), mktUsd = num('mkt');
+    const orders = num('orders'), mktPkr = num('mkt');
     const cancel = pct('cancel'), ret = pct('ret');
 
     const price = cost + margin;
-    const mktPkr = mktUsd * dollar;
 
     const confirmed = Math.floor(orders - orders * cancel + EPS);
     const cancelled = orders - confirmed;
@@ -480,7 +470,7 @@
     const productInv = confirmed * cost;
     const investment = productInv + marketing;
 
-    return { cost, margin, ship, orders, dollar, mktUsd, price, mktPkr,
+    return { cost, margin, ship, orders, price, mktPkr,
              confirmed, cancelled, returns, delivered,
              revenue, shipping, product, marketing, net, productInv, investment };
   }
@@ -498,7 +488,6 @@
     const r = calc();
 
     $('sellPriceV').textContent = 'Rs ' + fmt(r.price);
-    $('mktPkrV').textContent = 'Rs ' + fmt(r.mktPkr);
 
     // funnel
     $('fTotal').textContent = fmt(r.orders);
@@ -565,7 +554,7 @@
     // break-even marketing per order
     const beOrder = div(r.revenue - r.shipping - r.product, r.orders);
     $('vBE').textContent = beOrder > 0
-      ? 'Rs ' + fmt(beOrder) + ' ($' + (r.dollar ? (beOrder / r.dollar).toFixed(2) : '0.00') + ') per order'
+      ? 'Rs ' + fmt(beOrder) + ' per order'
       : 'Margin hi nahi bachta';
 
     // projection
@@ -574,7 +563,6 @@
     const rows = [
       ['Product cost total',      d => r.productInv * d, false],
       ['Marketing cost total',    d => r.marketing * d, false],
-      ['Ad spend ($)',            d => '$' + fmt(r.orders * r.mktUsd * d), true],
       ['Investment required',     d => r.investment * d, false, 'hl'],
       ['Confirmed orders',        d => fmt(r.confirmed * d), true],
       ['Delivered parcels',       d => fmt(r.delivered * d), true],
