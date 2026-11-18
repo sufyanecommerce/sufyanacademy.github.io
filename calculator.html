@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ecommerce Profit &amp; Loss Calculator | Sufyan Academy</title>
+<meta name="description" content="Free ecommerce profit and loss calculator for Pakistan. Enter orders, cancellations, returns, shipping and ad cost to see your daily, weekly and monthly profit.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://sufyanacademy.com/calculator.html">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%231B3B6F%22/%3E%3Ctext%20x%3D%2232%22%20y%3D%2243%22%20font-family%3D%22Georgia%2C%20serif%22%20font-size%3D%2226%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%3ESA%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F4F6F2; --card:#FFFFFF;
+    --ink:#121722; --muted:#5B6270; --muted-2:#8A8F98; --line:#E3E7DF;
+    --coral:#FF5A36; --coral-dim:#E64A28;
+    --navy:#1B3B6F; --navy-dim:#12294F; --navy-soft:#EAF0FA;
+    --green:#1F9D55; --green-soft:#E6F6EC;
+    --loss:#D13B1F; --loss-soft:#FDEBE7;
+    --amber:#E8A317;
+    --maxw:1180px;
+    --shadow:0 1px 2px rgba(18,23,34,.04), 0 12px 32px rgba(18,23,34,.06);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth; overflow-x:hidden; width:100%;}
+  body{ background:var(--bg); color:var(--ink); font-family:'Inter',system-ui,sans-serif; line-height:1.55; -webkit-font-smoothing:antialiased; overflow-x:hidden; font-variant-numeric:tabular-nums; }
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; }
+  .wrap{ max-width:var(--maxw); width:100%; margin:0 auto; padding:0 24px; }
+  :focus-visible{ outline:2px solid var(--coral); outline-offset:3px; }
+  svg{ display:block; }
+
+  /* ===== announce + nav ===== */
+  .announce{ background:var(--ink); color:#fff; text-align:center; padding:10px 16px; font-size:13px; }
+  .announce b{ color:#FF8A6E; font-weight:600; }
+  header{ position:sticky; top:0; z-index:100; background:rgba(255,255,255,.88); backdrop-filter:blur(12px); border-bottom:1px solid var(--line); }
+  nav{ max-width:var(--maxw); margin:0 auto; padding:14px 24px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .logo{ font-weight:800; font-size:19px; display:flex; align-items:center; gap:10px; white-space:nowrap; letter-spacing:-.02em; }
+  .logo-mark{ width:34px; height:34px; border-radius:9px; background:linear-gradient(135deg,var(--navy),var(--navy-dim)); color:#fff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; }
+  .logo .accent{ color:var(--coral); }
+  .nav-links{ display:flex; gap:6px; font-size:14px; color:var(--muted); font-weight:500; }
+  .nav-links a{ padding:8px 14px; border-radius:8px; transition:background .15s,color .15s; }
+  .nav-links a:hover{ background:var(--bg); color:var(--ink); }
+  .nav-links a.active{ background:var(--navy-soft); color:var(--navy); font-weight:600; }
+  .nav-cta{ background:var(--ink); color:#fff; font-weight:600; font-size:14px; padding:10px 20px; border-radius:9px; transition:background .15s; flex-shrink:0; }
+  .nav-cta:hover{ background:var(--coral); }
+  @media(max-width:780px){ .nav-links{ display:none; } }
+
+  /* ===== hero ===== */
+  .hero{ position:relative; overflow:hidden; color:#fff; background:linear-gradient(135deg,#0F2347 0%,var(--navy) 60%,#24508F 100%); padding:56px 0 120px; }
+  .hero::before{ content:''; position:absolute; width:520px; height:520px; right:-120px; top:-220px; border-radius:50%; background:radial-gradient(circle,rgba(255,90,54,.45),transparent 65%); }
+  .hero::after{ content:''; position:absolute; inset:0; background-image:radial-gradient(rgba(255,255,255,.09) 1px,transparent 1px); background-size:26px 26px; mask-image:linear-gradient(90deg,transparent 30%,#000); -webkit-mask-image:linear-gradient(90deg,transparent 30%,#000); }
+  .hero .wrap{ position:relative; z-index:1; display:grid; grid-template-columns:1.2fr .8fr; gap:40px; align-items:center; }
+  .badge{ display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2); padding:7px 14px; border-radius:30px; font-size:12.5px; font-weight:600; letter-spacing:.02em; margin-bottom:20px; }
+  .badge i{ width:8px; height:8px; border-radius:50%; background:#4ADE80; box-shadow:0 0 0 4px rgba(74,222,128,.25); }
+  .hero h1{ font-size:clamp(34px,4.8vw,56px); font-weight:800; letter-spacing:-.035em; line-height:1.05; margin-bottom:18px; }
+  .hero h1 span{ color:#FF8A6E; }
+  .hero p{ font-size:17px; color:rgba(255,255,255,.78); max-width:520px; }
+  .hero-points{ display:grid; gap:12px; }
+  .hp{ display:flex; gap:14px; align-items:center; background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.16); backdrop-filter:blur(6px); border-radius:14px; padding:14px 16px; }
+  .hp .ic{ width:40px; height:40px; border-radius:11px; background:rgba(255,255,255,.14); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .hp b{ display:block; font-size:14.5px; font-weight:600; }
+  .hp span{ font-size:12.5px; color:rgba(255,255,255,.7); }
+  @media(max-width:900px){ .hero .wrap{ grid-template-columns:1fr; } .hero-points{ display:none; } .hero{ padding:40px 0 110px; } }
+
+  /* ===== layout ===== */
+  .calc{ display:grid; grid-template-columns:1.05fr .95fr; gap:26px; align-items:start; margin-top:-76px; position:relative; z-index:2; padding-bottom:28px; }
+  .inputs{ display:grid; gap:18px; min-width:0; }
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:20px; padding:26px; box-shadow:var(--shadow); min-width:0; }
+  .card-head{ display:flex; align-items:center; gap:14px; margin-bottom:20px; }
+  .card-head .ic{ width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .ic.navy{ background:var(--navy-soft); color:var(--navy); }
+  .ic.coral{ background:#FFEDE8; color:var(--coral-dim); }
+  .ic.green{ background:var(--green-soft); color:var(--green); }
+  .card-head h3{ font-size:17px; font-weight:700; letter-spacing:-.01em; line-height:1.25; }
+  .card-head p{ font-size:13px; color:var(--muted-2); }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:18px 16px; }
+  .field{ display:flex; flex-direction:column; gap:7px; min-width:0; }
+  .field label{ font-size:13px; font-weight:600; }
+  .hint{ font-size:11.5px; color:var(--muted-2); line-height:1.4; }
+  .inp{ position:relative; }
+  .inp input[type=number]{ width:100%; font-family:inherit; font-size:15.5px; font-weight:600; color:var(--ink); background:#F7F8F5; border:1.5px solid var(--line); border-radius:11px; padding:12px 14px; transition:border .15s, box-shadow .15s, background .15s; -moz-appearance:textfield; }
+  .inp input[type=number]::-webkit-outer-spin-button,.inp input[type=number]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+  .inp input[type=number]:hover{ border-color:#CBD1C4; }
+  .inp input[type=number]:focus{ outline:none; border-color:var(--navy); background:#fff; box-shadow:0 0 0 4px rgba(27,59,111,.1); }
+  .inp.pre input{ padding-left:46px; } .inp.suf input{ padding-right:38px; }
+  .inp .u{ position:absolute; top:1.5px; bottom:1.5px; display:flex; align-items:center; font-size:12.5px; font-weight:600; color:var(--muted-2); pointer-events:none; }
+  .inp.pre .u{ left:0; width:38px; justify-content:center; border-right:1.5px solid var(--line); margin:6px 0; }
+  .inp.suf .u{ right:14px; }
+  .calc-box{ background:linear-gradient(135deg,#FFF3EF,#EEF3FB); border:1px dashed #D9C3BB; border-radius:11px; padding:10px 14px; font-weight:700; font-size:15.5px; min-height:47px; display:flex; flex-direction:column; justify-content:center; }
+  .calc-box small{ font-weight:500; color:var(--muted); font-size:11.5px; }
+  .calc-tag{ font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--coral-dim); margin-left:6px; }
+
+  /* slider fields */
+  .slider-field{ grid-column:1/-1; background:#F7F8F5; border:1.5px solid var(--line); border-radius:14px; padding:16px 18px; }
+  .slider-top{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-bottom:12px; }
+  .slider-top label{ font-size:13px; font-weight:600; }
+  .slider-val{ font-size:22px; font-weight:800; letter-spacing:-.02em; color:var(--navy); display:flex; align-items:baseline; gap:2px; }
+  .slider-val input{ width:62px; text-align:right; border:none; background:transparent; font:inherit; color:inherit; -moz-appearance:textfield; padding:0; }
+  .slider-val input:focus{ outline:none; border-bottom:2px solid var(--coral); }
+  .slider-val input::-webkit-outer-spin-button,.slider-val input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+  input[type=range]{ -webkit-appearance:none; appearance:none; width:100%; height:8px; border-radius:8px; background:linear-gradient(90deg,var(--coral) var(--p,0%),#DADFD2 var(--p,0%)); outline:none; cursor:pointer; }
+  input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:24px; height:24px; border-radius:50%; background:#fff; border:3px solid var(--coral); box-shadow:0 2px 8px rgba(0,0,0,.2); }
+  input[type=range]::-moz-range-thumb{ width:20px; height:20px; border-radius:50%; background:#fff; border:3px solid var(--coral); box-shadow:0 2px 8px rgba(0,0,0,.2); }
+  .slider-scale{ display:flex; justify-content:space-between; font-size:11px; color:var(--muted-2); margin-top:8px; }
+
+  .actions{ display:flex; gap:12px; flex-wrap:wrap; }
+  .btn{ display:inline-flex; align-items:center; gap:9px; font-weight:600; font-size:14px; padding:13px 22px; border-radius:11px; border:1.5px solid transparent; cursor:pointer; transition:transform .15s, box-shadow .15s, background .15s, border .15s; }
+  .btn-primary{ background:var(--ink); color:#fff; } .btn-primary:hover{ background:var(--coral); transform:translateY(-2px); box-shadow:0 12px 26px rgba(255,90,54,.28); }
+  .btn-ghost{ background:#fff; border-color:var(--line); color:var(--ink); } .btn-ghost:hover{ border-color:var(--ink); transform:translateY(-2px); }
+
+  /* ===== results ===== */
+  .result{ position:sticky; top:82px; display:grid; gap:18px; min-width:0; }
+  .verdict{ position:relative; overflow:hidden; border-radius:22px; padding:28px; color:#fff; background:linear-gradient(135deg,#137A41,#22A85D); box-shadow:0 24px 48px rgba(31,157,85,.3); transition:background .3s, box-shadow .3s; }
+  .verdict.loss{ background:linear-gradient(135deg,#A82B14,#E0482A); box-shadow:0 24px 48px rgba(209,59,31,.32); }
+  .verdict::after{ content:''; position:absolute; width:260px; height:260px; right:-90px; top:-110px; border-radius:50%; background:rgba(255,255,255,.12); }
+  .v-top{ display:flex; align-items:center; justify-content:space-between; gap:12px; position:relative; z-index:1; }
+  .v-label{ font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; opacity:.92; }
+  .v-pill{ display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,.2); padding:5px 12px; border-radius:20px; font-size:12px; font-weight:700; }
+  .v-amount{ position:relative; z-index:1; font-size:clamp(38px,5.4vw,54px); font-weight:800; letter-spacing:-.035em; line-height:1.1; margin:14px 0 6px; word-break:break-word; }
+  .v-note{ position:relative; z-index:1; font-size:13.5px; opacity:.92; max-width:420px; }
+  .v-stats{ position:relative; z-index:1; display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:20px; }
+  .vs{ background:rgba(255,255,255,.15); border-radius:12px; padding:11px 12px; }
+  .vs span{ display:block; font-size:11px; opacity:.85; font-weight:500; }
+  .vs b{ font-size:14.5px; font-weight:700; white-space:nowrap; }
+
+  .card.sm{ padding:22px; }
+  .card.sm h4{ font-size:15px; font-weight:700; margin-bottom:2px; }
+  .card.sm .sub{ font-size:12.5px; color:var(--muted-2); margin-bottom:16px; }
+
+  /* funnel bars */
+  .funnel{ display:grid; gap:11px; }
+  .fl{ display:grid; grid-template-columns:92px 1fr 44px; gap:12px; align-items:center; font-size:13px; }
+  .fl .name{ color:var(--muted); font-weight:500; }
+  .fl .bar{ height:12px; background:#EEF0EA; border-radius:8px; overflow:hidden; }
+  .fl .bar i{ display:block; height:100%; border-radius:8px; width:0; transition:width .45s cubic-bezier(.3,.7,.2,1); }
+  .fl .n{ text-align:right; font-weight:700; }
+  .c-navy{ background:linear-gradient(90deg,var(--navy),#3D6CB5); } .c-red{ background:linear-gradient(90deg,var(--coral-dim),#FF8A6E); } .c-green{ background:linear-gradient(90deg,#16883F,#3DCC7C); } .c-amber{ background:linear-gradient(90deg,#D18C0B,#F5C04A); }
+
+  /* money split */
+  .split{ display:flex; height:22px; border-radius:11px; overflow:hidden; background:#EEF0EA; gap:2px; }
+  .split i{ display:block; height:100%; transition:width .45s cubic-bezier(.3,.7,.2,1); min-width:0; }
+  .legend{ display:grid; grid-template-columns:1fr 1fr; gap:8px 14px; margin-top:14px; font-size:12.5px; }
+  .legend div{ display:flex; align-items:center; gap:8px; color:var(--muted); }
+  .legend i{ width:10px; height:10px; border-radius:3px; flex-shrink:0; }
+  .legend b{ color:var(--ink); margin-left:auto; font-weight:600; }
+
+  .rows{ margin-top:4px; }
+  .row{ display:flex; justify-content:space-between; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid #EEF0EA; font-size:14px; }
+  .row .k{ color:var(--muted); display:flex; align-items:center; gap:10px; }
+  .row .k em{ width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .row .k small{ display:block; color:var(--muted-2); font-size:11.5px; }
+  .row .v{ font-weight:700; white-space:nowrap; }
+  .row .v.neg{ color:var(--coral-dim); } .row .v.pos{ color:var(--green); }
+  .row.total{ border:none; margin-top:8px; padding:15px 16px; background:#F7F8F5; border-radius:12px; font-size:15px; }
+  .row.total .k{ color:var(--ink); font-weight:700; }
+  .row.total .v{ font-size:18px; }
+
+  .ratios{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .ratio{ background:#F7F8F5; border-radius:12px; padding:13px; border:1px solid #EEF0EA; }
+  .ratio .n{ font-size:19px; font-weight:800; letter-spacing:-.02em; }
+  .ratio .l{ font-size:11px; color:var(--muted); line-height:1.35; margin-top:3px; }
+  .be{ margin-top:12px; display:flex; gap:12px; align-items:center; background:var(--navy-soft); border-radius:12px; padding:13px 15px; }
+  .be .ic{ width:34px; height:34px; border-radius:10px; background:#fff; display:flex; align-items:center; justify-content:center; color:var(--navy); flex-shrink:0; }
+  .be b{ display:block; font-size:14px; }
+  .be span{ font-size:11.5px; color:var(--muted); }
+
+  /* ===== projection ===== */
+  .proj{ padding:28px 0 64px; }
+  .sec-head{ margin-bottom:22px; display:flex; justify-content:space-between; align-items:flex-end; gap:16px; flex-wrap:wrap; }
+  .sec-head h2{ font-size:clamp(24px,3vw,32px); font-weight:800; letter-spacing:-.03em; line-height:1.15; }
+  .sec-head p{ color:var(--muted); font-size:14.5px; max-width:520px; margin-top:6px; }
+  .tiles{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:18px; }
+  .tile{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow:var(--shadow); }
+  .tile span{ font-size:12px; color:var(--muted-2); font-weight:600; text-transform:uppercase; letter-spacing:.06em; }
+  .tile b{ display:block; font-size:22px; font-weight:800; letter-spacing:-.02em; margin-top:6px; }
+  .tile.pos b{ color:var(--green); } .tile.neg b{ color:var(--loss); }
+  .tbl-wrap{ background:var(--card); border:1px solid var(--line); border-radius:20px; overflow-x:auto; box-shadow:var(--shadow); }
+  table{ width:100%; border-collapse:collapse; min-width:720px; }
+  th,td{ padding:15px 18px; text-align:right; font-size:14px; white-space:nowrap; }
+  th:first-child,td:first-child{ text-align:left; position:sticky; left:0; background:inherit; }
+  thead th{ background:var(--navy-dim); color:#fff; font-size:12px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; }
+  thead th:first-child{ background:var(--navy-dim); }
+  tbody tr{ background:#fff; }
+  tbody td{ border-bottom:1px solid #EEF0EA; font-weight:500; }
+  tbody td:first-child{ font-weight:600; color:var(--muted); background:#fff; }
+  tbody tr.hl, tbody tr.hl td:first-child{ background:#F7F8F5; }
+  tbody tr.hl td{ font-weight:700; }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.neg{ color:var(--loss); } td.pos{ color:var(--green); }
+  tbody tr.profit td{ font-weight:800; font-size:15px; }
+  .custom-days{ display:inline-flex; align-items:center; gap:6px; }
+  .custom-days input{ width:58px; font-family:inherit; font-size:12px; font-weight:700; background:rgba(255,255,255,.14); color:#fff; border:1px solid rgba(255,255,255,.4); border-radius:6px; padding:4px 6px; text-align:center; -moz-appearance:textfield; }
+  .custom-days input::-webkit-outer-spin-button,.custom-days input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+  .custom-days input:focus{ outline:none; background:rgba(255,255,255,.25); }
+  .note{ font-size:12.5px; color:var(--muted-2); margin-top:14px; max-width:760px; }
+
+  /* ===== footer ===== */
+  footer{ border-top:1px solid var(--line); padding:32px 0; background:#fff; }
+  .foot-row{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+  .flogo{ font-weight:800; letter-spacing:-.02em; }
+  .foot-links{ display:flex; gap:24px; font-size:13.5px; color:var(--muted); }
+  .foot-links a:hover{ color:var(--coral); }
+  .foot-copy{ font-size:12.5px; color:var(--muted-2); margin-top:16px; }
+
+  @media(max-width:980px){
+    .calc{ grid-template-columns:1fr; }
+    .result{ position:static; }
+    .tiles{ grid-template-columns:repeat(2,1fr); }
+  }
+  @media(max-width:560px){
+    .grid2{ grid-template-columns:1fr; }
+    .card{ padding:20px 18px; }
+    .v-stats{ grid-template-columns:1fr; }
+    .vs{ display:flex; justify-content:space-between; align-items:center; }
+    .fl{ grid-template-columns:78px 1fr 38px; gap:8px; }
+    .ratios{ grid-template-columns:1fr; }
+    .legend{ grid-template-columns:1fr; }
+    .foot-row{ flex-direction:column; align-items:flex-start; }
+    .foot-links{ flex-direction:column; gap:8px; }
+    .announce{ font-size:11.5px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="announce">🧮 <b>Free Tool</b> · Apna ecommerce profit &amp; loss khud calculate karein</div>
+<header>
+  <nav>
+    <a href="index.html" class="logo"><div class="logo-mark">SA</div>Sufyan <span class="accent">Academy</span></a>
+    <div class="nav-links">
+      <a href="index.html#curriculum">Curriculum</a>
+      <a href="index.html#pricing">Pricing</a>
+      <a href="calculator.html" class="active">Calculator</a>
+      <a href="index.html#faq">FAQs</a>
+    </div>
+    <a href="enroll.html" class="nav-cta">Enroll Now</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="badge"><i></i>Ecommerce Calculator · Free</div>
+      <h1>Profit &amp; Loss <span>Calculator</span></h1>
+      <p>Orders, cancellations, returns, shipping aur marketing cost enter karein — turant pata chal jayega ke aap profit mein hain ya loss mein.</p>
+    </div>
+    <div class="hero-points">
+      <div class="hp"><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></div><div><b>Live hisaab</b><span>Number badalte hi result update</span></div></div>
+      <div class="hp"><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg></div><div><b>Returns ka asar</b><span>Shipping aur product cost sahi tarah shamil</span></div></div>
+      <div class="hp"><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></div><div><b>1 se 30 din ka plan</b><span>Investment aur profit projection</span></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="calc">
+
+    <!-- INPUTS -->
+    <div class="inputs">
+
+      <div class="card">
+        <div class="card-head">
+          <div class="ic navy"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg></div>
+          <div><h3>Product Pricing</h3><p>Product ki cost, shipping aur apna margin</p></div>
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label for="cost">Product cost</label>
+            <div class="inp pre"><span class="u">Rs</span><input id="cost" type="number" inputmode="decimal" min="0" value="500"></div>
+            <span class="hint">Aap ko product kitne mein parta hai</span>
+          </div>
+          <div class="field">
+            <label for="margin">Margin add-on</label>
+            <div class="inp pre"><span class="u">Rs</span><input id="margin" type="number" inputmode="decimal" min="0" value="1499"></div>
+            <span class="hint">Cost ke upar kitna profit rakhna hai</span>
+          </div>
+          <div class="field">
+            <label>Selling price <span class="calc-tag">Auto</span></label>
+            <div class="calc-box" id="sellPrice"><span id="sellPriceV">Rs 1,999</span><small>Product cost + Margin</small></div>
+          </div>
+          <div class="field">
+            <label for="ship">Shipping per parcel</label>
+            <div class="inp pre"><span class="u">Rs</span><input id="ship" type="number" inputmode="decimal" min="0" value="200"></div>
+            <span class="hint">Courier charges har confirmed parcel par</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="ic coral"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg></div>
+          <div><h3>Order Generation</h3><p>Rozana kitne orders aur ads ka kharcha</p></div>
+        </div>
+        <div class="grid2">
+          <div class="field">
+            <label for="orders">Total orders / day</label>
+            <div class="inp"><input id="orders" type="number" inputmode="numeric" min="0" value="64"></div>
+            <span class="hint">Website par aane wale saare orders</span>
+          </div>
+          <div class="field">
+            <label for="dollar">Dollar rate</label>
+            <div class="inp pre"><span class="u">Rs</span><input id="dollar" type="number" inputmode="decimal" min="0" value="297"></div>
+            <span class="hint">1 USD = kitne PKR</span>
+          </div>
+          <div class="field">
+            <label for="mkt">Marketing cost per order</label>
+            <div class="inp pre"><span class="u">$</span><input id="mkt" type="number" inputmode="decimal" min="0" step="0.01" value="0.79"></div>
+            <span class="hint">Ad spend ÷ total orders (dollars mein)</span>
+          </div>
+          <div class="field">
+            <label>Marketing per order (PKR) <span class="calc-tag">Auto</span></label>
+            <div class="calc-box" id="mktPkr"><span id="mktPkrV">Rs 235</span><small>$ cost × Dollar rate</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="ic green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="18.5" cy="18.5" r="2"/></svg></div>
+          <div><h3>Shipment / Return</h3><p>Cancel aur return ka percentage</p></div>
+        </div>
+        <div class="grid2">
+          <div class="slider-field">
+            <div class="slider-top">
+              <label for="cancel">Before-booking cancellation</label>
+              <div class="slider-val"><input id="cancel" type="number" inputmode="decimal" min="0" max="100" value="65" aria-label="Cancellation percent">%</div>
+            </div>
+            <input id="cancelR" type="range" min="0" max="100" step="1" value="65" aria-label="Cancellation slider">
+            <div class="slider-scale"><span>0%</span><span>Confirmation call par jitne orders cancel hon</span><span>100%</span></div>
+          </div>
+          <div class="slider-field">
+            <div class="slider-top">
+              <label for="ret">Return</label>
+              <div class="slider-val"><input id="ret" type="number" inputmode="decimal" min="0" max="100" value="20" aria-label="Return percent">%</div>
+            </div>
+            <input id="retR" type="range" min="0" max="100" step="1" value="20" aria-label="Return slider">
+            <div class="slider-scale"><span>0%</span><span>Dispatch ke baad jitne parcels wapis aayen</span><span>100%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="btnReset" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Reset to default</button>
+        <button class="btn btn-ghost" id="btnCopy" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span id="copyTxt">Copy summary</span></button>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <aside class="result" aria-live="polite">
+      <div class="verdict" id="verdict">
+        <div class="v-top">
+          <div class="v-label" id="vLabel">Daily Profit</div>
+          <div class="v-pill" id="vPill">▲ Profit</div>
+        </div>
+        <div class="v-amount" id="vAmount">Rs 0</div>
+        <div class="v-note" id="vNote"></div>
+        <div class="v-stats">
+          <div class="vs"><span>7 din</span><b id="s7">—</b></div>
+          <div class="vs"><span>30 din</span><b id="s30">—</b></div>
+          <div class="vs"><span>Per delivered parcel</span><b id="sUnit">—</b></div>
+        </div>
+      </div>
+
+      <div class="card sm">
+        <h4>Order Funnel</h4>
+        <div class="sub">Ek din ke orders ka safar</div>
+        <div class="funnel">
+          <div class="fl"><span class="name">Total orders</span><div class="bar"><i class="c-navy" id="bTotal"></i></div><span class="n" id="fTotal">0</span></div>
+          <div class="fl"><span class="name">Cancelled</span><div class="bar"><i class="c-red" id="bCancel"></i></div><span class="n" id="fCancel">0</span></div>
+          <div class="fl"><span class="name">Confirmed</span><div class="bar"><i class="c-amber" id="bConf"></i></div><span class="n" id="fConf">0</span></div>
+          <div class="fl"><span class="name">Returns</span><div class="bar"><i class="c-red" id="bRet"></i></div><span class="n" id="fRet">0</span></div>
+          <div class="fl"><span class="name">Delivered</span><div class="bar"><i class="c-green" id="bDel"></i></div><span class="n" id="fDel">0</span></div>
+        </div>
+      </div>
+
+      <div class="card sm">
+        <h4>Paisa kahan gaya?</h4>
+        <div class="sub">Delivered parcels ki amount ka hisaab</div>
+        <div class="split" id="split"></div>
+        <div class="legend" id="legend"></div>
+        <div class="rows">
+          <div class="row"><span class="k"><em style="background:var(--green)"></em><span id="kRev">Delivered parcels amount</span></span><span class="v pos" id="vRev">0</span></div>
+          <div class="row"><span class="k"><em style="background:var(--amber)"></em><span id="kShip">Shipping</span></span><span class="v neg" id="vShip">0</span></div>
+          <div class="row"><span class="k"><em style="background:var(--navy)"></em><span><span id="kProd">Product cost</span><small>Sirf delivered parcels ki</small></span></span><span class="v neg" id="vProd">0</span></div>
+          <div class="row"><span class="k"><em style="background:var(--coral)"></em><span id="kMkt">Marketing cost</span></span><span class="v neg" id="vMkt">0</span></div>
+          <div class="row total"><span class="k">Net profit / loss</span><span class="v" id="vNet">0</span></div>
+        </div>
+      </div>
+
+      <div class="card sm">
+        <h4>Key Ratios</h4>
+        <div class="sub">Business kitna healthy hai</div>
+        <div class="ratios">
+          <div class="ratio"><div class="n" id="rInv">0%</div><div class="l">Profit ÷ Investment</div></div>
+          <div class="ratio"><div class="n" id="rMkt">0%</div><div class="l">Profit ÷ Marketing</div></div>
+          <div class="ratio"><div class="n" id="rProd">0%</div><div class="l">Profit ÷ Product cost</div></div>
+        </div>
+        <div class="be">
+          <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></div>
+          <div><b id="vBE">—</b><span>Break-even marketing cost — isse zyada ad cost par loss shuru</span></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- PROJECTION -->
+  <section class="proj">
+    <div class="sec-head">
+      <div>
+        <h2>Investment &amp; Profit Projection</h2>
+        <p>Isi performance par agle din ka hisaab. Aakhri column mein apne din khud likhein.</p>
+      </div>
+    </div>
+    <div class="tiles" id="tiles"></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th></th><th>1 Day</th><th>5 Days</th><th>7 Days</th><th>10 Days</th><th>30 Days</th>
+            <th><span class="custom-days"><input id="customDays" type="number" min="1" value="15" aria-label="Custom days"> Days</span></th>
+          </tr>
+        </thead>
+        <tbody id="projBody"></tbody>
+      </table>
+    </div>
+    <p class="note">Investment = confirmed parcels ki product cost + marketing cost. Returns ka shipping aur marketing cost loss mein shamil hai; product cost sirf delivered parcels ki ginti hai.</p>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-row">
+      <div class="flogo">Sufyan Academy</div>
+      <div class="foot-links">
+        <a href="mailto:sufyanahmad.info@gmail.com">sufyanahmad.info@gmail.com</a>
+        <a href="https://wa.me/923004540431" target="_blank" rel="noopener">WhatsApp: 0300-4540431</a>
+      </div>
+    </div>
+    <div class="foot-copy">© 2026 Sufyan Academy. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const DEFAULTS = { cost:500, margin:1499, ship:200, orders:64, dollar:297, mkt:0.79, cancel:65, ret:20, customDays:15 };
+  const inputs = ['cost','margin','ship','orders','dollar','mkt','cancel','ret'];
+  const EPS = 1e-9;
+
+  const num = id => { const v = parseFloat($(id).value); return isFinite(v) && v > 0 ? v : 0; };
+  const pct = id => Math.min(100, num(id)) / 100;
+  const fmt = n => Math.round(n).toLocaleString('en-US');
+  const rs  = n => (n < 0 ? '−' : '') + 'Rs ' + fmt(Math.abs(n));
+  const pc  = n => (isFinite(n) ? (n * 100).toFixed(1) : '0.0') + '%';
+  const div = (a, b) => b ? a / b : 0;
+  const w = (id, p) => { $(id).style.width = Math.max(0, Math.min(100, p)) + '%'; };
+
+  function calc(){
+    const cost = num('cost'), margin = num('margin'), ship = num('ship');
+    const orders = num('orders'), dollar = num('dollar'), mktUsd = num('mkt');
+    const cancel = pct('cancel'), ret = pct('ret');
+
+    const price = cost + margin;
+    const mktPkr = mktUsd * dollar;
+
+    const confirmed = Math.floor(orders - orders * cancel + EPS);
+    const cancelled = orders - confirmed;
+    const returns   = Math.ceil(confirmed * ret - EPS);
+    const delivered = confirmed - returns;
+
+    const revenue = delivered * price;
+    const shipping = confirmed * ship;
+    const product = delivered * cost;
+    const marketing = orders * mktPkr;
+    const net = revenue - shipping - product - marketing;
+
+    const productInv = confirmed * cost;
+    const investment = productInv + marketing;
+
+    return { cost, margin, ship, orders, dollar, mktUsd, price, mktPkr,
+             confirmed, cancelled, returns, delivered,
+             revenue, shipping, product, marketing, net, productInv, investment };
+  }
+
+  function setSign(el, val){
+    el.classList.toggle('neg', val < 0);
+    el.classList.toggle('pos', val > 0);
+  }
+
+  function syncSlider(r){
+    r.style.setProperty('--p', r.value + '%');
+  }
+
+  function render(){
+    const r = calc();
+
+    $('sellPriceV').textContent = 'Rs ' + fmt(r.price);
+    $('mktPkrV').textContent = 'Rs ' + fmt(r.mktPkr);
+
+    // funnel
+    $('fTotal').textContent = fmt(r.orders);
+    $('fCancel').textContent = fmt(r.cancelled);
+    $('fConf').textContent = fmt(r.confirmed);
+    $('fRet').textContent = fmt(r.returns);
+    $('fDel').textContent = fmt(r.delivered);
+    const base = r.orders || 1;
+    w('bTotal', r.orders ? 100 : 0);
+    w('bCancel', r.cancelled / base * 100);
+    w('bConf', r.confirmed / base * 100);
+    w('bRet', r.returns / base * 100);
+    w('bDel', r.delivered / base * 100);
+
+    // breakdown rows
+    $('kRev').textContent = 'Delivered ' + r.delivered + ' parcels amount';
+    $('kShip').textContent = 'Shipping of ' + r.confirmed + ' parcels';
+    $('kMkt').textContent = 'Marketing cost of ' + fmt(r.orders) + ' orders';
+    $('kProd').textContent = 'Product cost of ' + r.delivered + ' parcels';
+    $('vRev').textContent = rs(r.revenue);
+    $('vShip').textContent = '− ' + rs(r.shipping);
+    $('vProd').textContent = '− ' + rs(r.product);
+    $('vMkt').textContent = '− ' + rs(r.marketing);
+    $('vNet').textContent = rs(r.net);
+    setSign($('vNet'), r.net);
+
+    // money split bar: costs + profit (or loss overflow)
+    const costs = r.shipping + r.product + r.marketing;
+    const total = Math.max(r.revenue, costs) || 1;
+    const profitSeg = Math.max(0, r.net);
+    const parts = [
+      ['Product', r.product, 'var(--navy)'],
+      ['Shipping', r.shipping, 'var(--amber)'],
+      ['Marketing', r.marketing, 'var(--coral)'],
+      [r.net < 0 ? 'Loss (revenue se zyada kharcha)' : 'Profit', r.net < 0 ? -r.net * 0 : profitSeg, 'var(--green)']
+    ];
+    $('split').innerHTML = parts.map(p => '<i style="width:' + (p[1] / total * 100) + '%;background:' + p[2] + '"></i>').join('');
+    $('legend').innerHTML = [
+      ['Product', r.product, 'var(--navy)'],
+      ['Shipping', r.shipping, 'var(--amber)'],
+      ['Marketing', r.marketing, 'var(--coral)'],
+      [r.net < 0 ? 'Loss' : 'Profit', Math.abs(r.net), r.net < 0 ? 'var(--loss)' : 'var(--green)']
+    ].map(p => '<div><i style="background:' + p[2] + '"></i>' + p[0] + '<b>' + pc(div(p[1], total)) + '</b></div>').join('');
+
+    // verdict
+    const loss = r.net < 0;
+    $('verdict').classList.toggle('loss', loss);
+    $('vLabel').textContent = loss ? 'Daily Loss' : (r.net === 0 ? 'Break-even' : 'Daily Profit');
+    $('vPill').textContent = loss ? '▼ Loss' : (r.net === 0 ? '● Break-even' : '▲ Profit');
+    $('vAmount').textContent = rs(Math.abs(r.net));
+    $('vNote').textContent = loss
+      ? 'Is performance par aap rozana nuksan mein hain. Marketing cost, returns ya margin check karein.'
+      : (r.net === 0 ? 'Na profit, na loss.' : 'Is performance par aap rozana profit mein hain.');
+    $('s7').textContent = rs(r.net * 7);
+    $('s30').textContent = rs(r.net * 30);
+    $('sUnit').textContent = r.delivered ? rs(r.net / r.delivered) : '—';
+
+    // ratios
+    $('rInv').textContent = pc(div(r.net, r.investment));
+    $('rMkt').textContent = pc(div(r.net, r.marketing));
+    $('rProd').textContent = pc(div(r.net, r.productInv));
+    ['rInv','rMkt','rProd'].forEach(id => { $(id).style.color = r.net < 0 ? 'var(--loss)' : 'var(--green)'; });
+
+    // break-even marketing per order
+    const beOrder = div(r.revenue - r.shipping - r.product, r.orders);
+    $('vBE').textContent = beOrder > 0
+      ? 'Rs ' + fmt(beOrder) + ' ($' + (r.dollar ? (beOrder / r.dollar).toFixed(2) : '0.00') + ') per order'
+      : 'Margin hi nahi bachta';
+
+    // projection
+    const customD = Math.max(1, Math.floor(parseFloat($('customDays').value) || 1));
+    const days = [1,5,7,10,30,customD];
+    const rows = [
+      ['Product cost total',      d => r.productInv * d, false],
+      ['Marketing cost total',    d => r.marketing * d, false],
+      ['Ad spend ($)',            d => '$' + fmt(r.orders * r.mktUsd * d), true],
+      ['Investment required',     d => r.investment * d, false, 'hl'],
+      ['Confirmed orders',        d => fmt(r.confirmed * d), true],
+      ['Delivered parcels',       d => fmt(r.delivered * d), true],
+      ['Profit / loss after returns', d => r.net * d, false, 'profit'],
+    ];
+    $('projBody').innerHTML = rows.map(([label, fn, raw, cls]) => {
+      const cells = days.map(d => {
+        const v = fn(d);
+        if (raw) return '<td>' + v + '</td>';
+        const sign = cls === 'profit' ? (v < 0 ? 'neg' : v > 0 ? 'pos' : '') : '';
+        return '<td class="' + sign + '">' + rs(v) + '</td>';
+      }).join('');
+      return '<tr class="' + (cls === 'hl' ? 'hl' : cls === 'profit' ? 'hl profit' : '') + '"><td>' + label + '</td>' + cells + '</tr>';
+    }).join('');
+
+    $('tiles').innerHTML = [
+      ['7 din ka profit', r.net * 7, true],
+      ['30 din ka profit', r.net * 30, true],
+      ['30 din ki investment', r.investment * 30, false],
+      ['30 din ke delivered', fmt(r.delivered * 30) + ' parcels', null]
+    ].map(t => {
+      const cls = t[2] === true ? (t[1] < 0 ? 'neg' : 'pos') : '';
+      return '<div class="tile ' + cls + '"><span>' + t[0] + '</span><b>' + (typeof t[1] === 'number' ? rs(t[1]) : t[1]) + '</b></div>';
+    }).join('');
+
+    window.__last = r;
+  }
+
+  // inputs
+  inputs.concat('customDays').forEach(id => $(id).addEventListener('input', render));
+
+  // slider <-> number sync
+  [['cancel','cancelR'],['ret','retR']].forEach(([n, s]) => {
+    const num_ = $(n), rng = $(s);
+    rng.addEventListener('input', () => { num_.value = rng.value; syncSlider(rng); render(); });
+    num_.addEventListener('input', () => { rng.value = Math.min(100, num(n)); syncSlider(rng); });
+    syncSlider(rng);
+  });
+
+  $('btnReset').addEventListener('click', () => {
+    Object.keys(DEFAULTS).forEach(k => { $(k).value = DEFAULTS[k]; });
+    $('cancelR').value = DEFAULTS.cancel; $('retR').value = DEFAULTS.ret;
+    syncSlider($('cancelR')); syncSlider($('retR'));
+    render();
+  });
+
+  $('btnCopy').addEventListener('click', () => {
+    const r = window.__last;
+    const text = [
+      'Ecommerce Profit & Loss (per day)',
+      'Total orders: ' + fmt(r.orders) + ' | Confirmed: ' + r.confirmed + ' | Returns: ' + r.returns + ' | Delivered: ' + r.delivered,
+      'Revenue: ' + rs(r.revenue),
+      'Shipping: ' + rs(r.shipping),
+      'Product cost: ' + rs(r.product),
+      'Marketing: ' + rs(r.marketing),
+      (r.net < 0 ? 'Net LOSS: ' : 'Net PROFIT: ') + rs(Math.abs(r.net)),
+      '30 days: ' + rs(r.net * 30)
+    ].join('\n');
+    const t = $('copyTxt'), old = t.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      t.textContent = 'Copied!';
+      setTimeout(() => t.textContent = old, 1800);
+    }).catch(() => {});
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
